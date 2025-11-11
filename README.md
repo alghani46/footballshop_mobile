@@ -54,6 +54,28 @@ Assaigment 7
 
 
 
+Assaigment 8
+1. Navigator.push()
+   Pushes a new page on top of the current one. The previous page stays in the stack, can be popped to go to the previous page
+   Navigator.pushReplacement()
+   Replaces the current page with a new one. The previous page is removed from the stack
+   
+2. Scaffold provides the basic layout structure for a Material page: appBar, drawer
+   AppBar gives a consistent page title and actions.
+   Drawer offers app-wide navigation (Home, Add Product) that appears on every main page.
+   The hierarchy helps with consistentcy and easier structure by providing the drawer
 
 
+3. -Padding, Makes it easier to tap the buttons
+   Widget _row(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: RichText(
+        text: TextSpan(
+          style: DefaultTextStyle.of(context).style,
+          children: [
+            TextSpan(text: '$label: ', style: const TextStyle(fontWeight: FontWeight.bold)),
+            TextSpan(text: value),]
+          
+   
    
