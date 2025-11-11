@@ -38,10 +38,10 @@ Assaigment 7
    handle user interaction, animations
 
 
-5.BuildContext is an object that serves as a handle to the location of a widget within the widget tree. 
-  It represents the context in which a specific widget is built and exists.
-  Every build method receives a BuildContext corresponding to the current widget’s position.
-  (showing a SnackBar must use a context that has a ScaffoldMessenger above it)
+5. BuildContext is an object that serves as a handle to the location of a widget within the widget tree. 
+   It represents the context in which a specific widget is built and exists.
+   Every build method receives a BuildContext corresponding to the current widget’s position.
+   (showing a SnackBar must use a context that has a ScaffoldMessenger above it)
 
 
 6. Hot reload
