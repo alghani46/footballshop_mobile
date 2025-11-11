@@ -67,6 +67,8 @@ Assaigment 8
 
 
 3. -Padding, Makes it easier to tap the buttons
+
+   
    Widget _row(String label, String value) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
@@ -75,7 +77,35 @@ Assaigment 8
           style: DefaultTextStyle.of(context).style,
           children: [
             TextSpan(text: '$label: ', style: const TextStyle(fontWeight: FontWeight.bold)),
-            TextSpan(text: value),]
-          
+            TextSpan(text: value),
+
+
+   -ListView, prevents overflow and keeps the Save button reachable.
+
+
+  child: ListView(
+  padding: const EdgeInsets.all(16),
+  children: [
+    SizedBox(
+      height: 56,
+      child: FilledButton.icon(
+        icon: const Icon(Icons.save_outlined),
+        label: const Text('Save'),
+        onPressed: _onSave,
+
+
+
+   -SingleChildScrollView, Makes it as a scrollable form
+
+   SingleChildScrollView(
+  padding: const EdgeInsets.all(16),
+  child: Column(
+    children: const [
+      // TextFormFields, Dropdowns, etc.
+
+
+
+
+4. using ThemeData ,then using the parameters of colorScheme, and seedColor
    
    
