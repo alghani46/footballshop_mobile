@@ -1,7 +1,7 @@
 # footballshop_mobile
 footballshop_mobile
 
-
+Assaigment 7
 1. Flutter renders UI as a tree of widgets, Each part describe a part of the interface.
    The framework walks the tree top-down to build Elements and RenderObjects
    Every Widget except the root has exactly has one parent or more children.
@@ -24,8 +24,8 @@ footballshop_mobile
    -StatelessWidget: define MyApp, HomePage, and ButtonsArea as stateless components
 
 
-3.MaterialApp, Creates a root navigator and route table
-Enables Material components (Scaffold, AppBar, SnackBar)
+3. MaterialApp, Creates a root navigator and route table
+   Enables Material components (Scaffold, AppBar, SnackBar)
 
 4. -StatelessWidget
    Once created, its properties cannot change
@@ -39,9 +39,9 @@ Enables Material components (Scaffold, AppBar, SnackBar)
 
 
 5.BuildContext is an object that serves as a handle to the location of a widget within the widget tree. 
-It represents the context in which a specific widget is built and exists.
-Every build method receives a BuildContext corresponding to the current widget’s position.
-(showing a SnackBar must use a context that has a ScaffoldMessenger above it)
+  It represents the context in which a specific widget is built and exists.
+  Every build method receives a BuildContext corresponding to the current widget’s position.
+  (showing a SnackBar must use a context that has a ScaffoldMessenger above it)
 
 
 6. Hot reload
