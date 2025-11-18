@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'app_drawer.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
 
 class AddProductPage extends StatefulWidget {
   const AddProductPage({super.key});
@@ -62,62 +66,62 @@ class _AddProductPageState extends State<AddProductPage> {
   String? _validateThumbnail(String? v) {
     if (v == null || v.trim().isEmpty) return null; // optional
     final uri = Uri.tryParse(v.trim());
-    final ok = uri != null && uri.hasScheme && (uri.scheme == 'http' || uri.scheme == 'https');
+    final ok =
+        uri != null && uri.hasScheme && (uri.scheme == 'http' || uri.scheme == 'https');
     if (!ok) return 'Thumbnail must be a valid http/https URL';
     if (v.length > 200) return 'URL too long (max 200 chars)';
     return null;
   }
 
-  // ===== On Save =====
+  // ===== On Save: call Django API to create product =====
   Future<void> _onSave() async {
     if (!_formKey.currentState!.validate()) return;
 
-    final data = {
-      'name': _nameC.text.trim(),
-      'price': double.parse(_priceC.text.trim()),
-      'description': _descC.text.trim(),
-      'category': _selectedCategory,
-      'is_featured': _isFeatured,
-      'thumbnail': _thumbC.text.trim().isEmpty ? null : _thumbC.text.trim(),
-    };
+    final request = context.read<CookieRequest>();
 
-    await showDialog<void>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Product Preview'),
-        content: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _row('Name', data['name'].toString()),
-              _row('Price', data['price'].toString()),
-              _row('Description', data['description'].toString()),
-              _row('Category', data['category'].toString()),
-              _row('Is Featured', data['is_featured'].toString()),
-              _row('Thumbnail', data['thumbnail']?.toString() ?? '-'),
-            ],
+    final response = await request.postJson(
+      // Flutter Web → localhost, not 10.0.2.2
+      "http://localhost:8000/create-flutter/",
+      jsonEncode({
+        "name": _nameC.text.trim(),
+        "price": _priceC.text.trim(),
+        "description": _descC.text.trim(),
+        "category": _selectedCategory ?? "",
+        "thumbnail": _thumbC.text.trim(),
+        "is_featured": _isFeatured,
+      }),
+    );
+
+    if (!mounted) return;
+
+    final messenger = ScaffoldMessenger.of(context)..hideCurrentSnackBar();
+
+    if (response['status'] == 'success') {
+      messenger.showSnackBar(
+        const SnackBar(content: Text('Product created successfully')),
+      );
+
+      // Clear form
+      _nameC.clear();
+      _priceC.clear();
+      _descC.clear();
+      _thumbC.clear();
+      setState(() {
+        _selectedCategory = null;
+        _isFeatured = false;
+      });
+
+      // Go to My Products page
+      Navigator.pushReplacementNamed(context, '/my-products');
+    } else {
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(
+            'Failed to create product: ${response['message'] ?? 'Unknown error'}',
           ),
         ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Close')),
-        ],
-      ),
-    );
-  }
-
-  Widget _row(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: RichText(
-        text: TextSpan(
-          style: DefaultTextStyle.of(context).style,
-          children: [
-            TextSpan(text: '$label: ', style: const TextStyle(fontWeight: FontWeight.bold)),
-            TextSpan(text: value),
-          ],
-        ),
-      ),
-    );
+      );
+    }
   }
 
   // ===== UI =====
@@ -147,7 +151,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 controller: _priceC,
                 decoration: const InputDecoration(
                   labelText: 'Price',
-                  hintText: 'e.g. 129.99',
+                  hintText: 'e.g. 129999',
                   border: OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.number,
